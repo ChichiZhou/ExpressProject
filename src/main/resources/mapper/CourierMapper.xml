@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.hezho.dao.BaseCourierDao">
+    <select id="console" resultType="map">
+        select (select count(id)) as data1_size, (select count(to_days(regTime)=to_days(now())) or null) as data1_day
+        from ecourier
+    </select>
+
+    <select id="findAll" resultType="com.hezho.bean.Courier" parameterType="map">
+        select * from ecourier limit #{offset}, #{pageNumber}
+    </select>
+
+    <select id="findByCourierID" resultType="com.hezho.bean.Courier" parameterType="string">
+        select * from ecourier where courierID=#{courierID}
+    </select>
+
+    <insert id="insert" parameterType="com.hezho.bean.Courier">
+        insert into ecourier(courierName, password, courierPhone, regTime, loginTime, courierID, workLoad)
+        values(#{courierName}, #{password}, #{courierPhone}, now(), null, #{workLoad}, #{courierID})
+    </insert>
+
+    <update id="update" parameterType="map">
+        update ecourier set courierName=#{courierName},password=#{password},courierPhone=#{courierPhone},workLoad=#{workLoad}
+        where courierID=#{courierID}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        delete from ecourier where courierID=#{courierID}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,20 +1,45 @@
 package com.hezho.service;
 
 import com.hezho.bean.Express;
+import com.hezho.dao.BaseCourierDao;
 import com.hezho.dao.BaseExpressDao;
-import com.hezho.dao.impl.ExpressDaoMysql;
+//import com.hezho.dao.impl.ExpressDaoMysql;
 import com.hezho.exception.DuplicateCodeException;
 import com.hezho.util.RandomUtil;
+import com.hezho.util.SqlSessionUtil;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class ExpressService{
-    @Autowired
-    private  BaseExpressDao dao;
+//    @Autowired
+//    private  BaseExpressDao dao;
+    Reader reader;
+
+    {
+        try {
+            reader = Resources.getResourceAsReader("mybatis.xml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 得到sqlSessionFactoryBuilder
+    SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+    SqlSessionFactory build = builder.build(reader);
+    // 得到 session
+    SqlSession session = build.openSession();
+    BaseExpressDao baseExpressDao = session.getMapper(BaseExpressDao.class);
 
     /**
      * 用于查询数据库中的全部快递（总数+新增），待取件快递（总数+新增）
@@ -22,7 +47,10 @@ public class ExpressService{
      * @return [{size:总数,day:新增},{size:总数,day:新增}]
      */
     public List<Map<String, Integer>> console() {
-        return dao.console();
+        List<Map<String, Integer>> resultMap = baseExpressDao.console();
+        System.out.println(resultMap);
+        SqlSessionUtil.closeSession();
+        return resultMap;
     }
 
     /**
@@ -34,7 +62,13 @@ public class ExpressService{
      * @return 快递的集合
      */
     public List<Express> findAll(boolean limit, int offset, int pageNumber) {
-        return dao.findAll(limit,offset,pageNumber);
+        Map map = new HashMap();
+        map.put("offset", offset);
+        map.put("pageNumber", pageNumber);
+        List<Express> expresses = baseExpressDao.findAll(map);
+        SqlSessionUtil.closeSession();
+        return expresses;
+
     }
 
     /**
@@ -44,7 +78,9 @@ public class ExpressService{
      * @return 查询的快递信息，单号不存在时返回null
      */
     public Express findByNumber(String number) {
-        return dao.findByNumber(number);
+        Express express = baseExpressDao.findByNumber(number);
+        SqlSessionUtil.closeSession();
+        return express;
     }
 
     /**
@@ -54,7 +90,9 @@ public class ExpressService{
      * @return 查询的快递信息，取件码不存在时返回null
      */
     public Express findByCode(String code) {
-        return dao.findByCode(code);
+        Express express = baseExpressDao.findByNumber(code);
+        SqlSessionUtil.closeSession();
+        return express;
     }
 
     /**
@@ -64,7 +102,9 @@ public class ExpressService{
      * @return 查询的快递信息列表
      */
     public List<Express> findByUserPhone(String userPhone) {
-        return dao.findByUserPhone(userPhone);
+        List<Express> expresses = baseExpressDao.findByUserPhone(userPhone);
+        SqlSessionUtil.closeSession();
+        return expresses;
     }
 
     /**
@@ -74,7 +114,9 @@ public class ExpressService{
      * @return 查询的快递信息列表
      */
     public List<Express> findBySysPhone(String sysPhone) {
-        return dao.findBySysPhone(sysPhone);
+        List<Express> expresses = baseExpressDao.findByUserPhone(sysPhone);
+        SqlSessionUtil.closeSession();
+        return expresses;
     }
 
     /**
@@ -83,18 +125,21 @@ public class ExpressService{
      * @param e 要录入的快递对象
      * @return 录入的结果，true表示成功，false表示失败
      */
-    public boolean insert(Express e){
+    public int insert(Express e){
         //1.    生成了取件码
         e.setCode(RandomUtil.getCode()+"");
         try {
-            boolean flag = dao.insert(e);
-            if(flag){
+            int flag = baseExpressDao.insert(e);
+            session.commit();
+            if(flag == 1){
                 //录入成功
                 //SMSUtil.send(e.getUserPhone(),e.getCode());
             }
             return flag;
         } catch (DuplicateCodeException duplicateCodeException) {
             return insert(e);      // 这里用了递归
+        } finally {
+            SqlSessionUtil.closeSession();
         }
     }
 
@@ -108,18 +153,20 @@ public class ExpressService{
      *
      *  逻辑 BUG ,
      */
-    public boolean update(int id, Express newExpress) {
-        if(newExpress.getUserPhone()!=null){
-            dao.delete(id);
-            return insert(newExpress);
-        }else{
-            boolean update = dao.update(id, newExpress);
-            Express e = dao.findByNumber(newExpress.getNumber());
-            if(newExpress.getStatus() == 1){
-                updateStatus(e.getCode());
-            }
-            return update;
-        }
+    public int update(int id, Express newExpress) {
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("number", newExpress.getNumber());
+        map.put("username", newExpress.getUsername());
+        map.put("company", newExpress.getCompany());
+        map.put("code", newExpress.getCode());
+        map.put("sysphone", newExpress.getSysPhone());
+
+        int update = baseExpressDao.update(map);
+        session.commit();
+        SqlSessionUtil.closeSession();
+        return update;
+
     }
 
     /**
@@ -128,8 +175,11 @@ public class ExpressService{
      * @param code 要修改的快递取件码
      * @return 修改的结果，true表示成功，false表示失败
      */
-    public boolean updateStatus(String code) {
-        return dao.updateStatus(code);
+    public int updateStatus(String code) {
+        int updateStatus = baseExpressDao.updateStatus(code);
+        session.commit();
+        SqlSessionUtil.closeSession();
+        return updateStatus;
     }
 
     /**
@@ -138,8 +188,11 @@ public class ExpressService{
      * @param id 要删除的快递id
      * @return 删除的结果，true表示成功，false表示失败
      */
-    public boolean delete(int id) {
-        return dao.delete(id);
+    public int delete(int id) {
+        int flag = baseExpressDao.delete(id);
+        session.commit();
+        SqlSessionUtil.closeSession();
+        return flag;
     }
 
     /**
@@ -150,6 +203,11 @@ public class ExpressService{
      * @return 查询的快递信息列表
      */
     public List<Express> findByUserPhoneAndStatus(String userPhone, int status) {
-        return dao.findByUserPhoneAndStatus(userPhone,status);
+        Map map = new HashMap();
+        map.put("userphone", userPhone);
+        map.put("status", status);
+        List<Express> expressList = baseExpressDao.findByUserPhoneAndStatus(map);
+        SqlSessionUtil.closeSession();
+        return expressList;
     }
 }

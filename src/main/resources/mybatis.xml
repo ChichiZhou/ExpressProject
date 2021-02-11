@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!--给类起别名-->
+    <typeAliases>
+<!--        <typeAlias type="com.hezho.bean.Student" alias="Student"/>-->
+        <!--对包起别名之后，类的首字母小写之后即为别名-->
+        <package name="com.hezho.bean"/>
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        </plugin>
+    </plugins>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai"/>
+                <property name="username" value="root"/>
+                <property name="password" value="zhouchichi"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 指定maper⽂件的路径（maven项⽬从resources源⽂件夹下找资源） -->
+    <mappers>
+        <mapper resource="mapper/AdminMapper.xml"/>
+        <mapper resource="mapper/CourierMapper.xml"/>
+        <mapper resource="mapper/CustomerMapper.xml"/>
+        <mapper resource="mapper/ExpressMapper.xml"/>
+    </mappers>
+</configuration>

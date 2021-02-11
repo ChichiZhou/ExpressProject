@@ -109,9 +109,9 @@ public class CourierController {
 
         System.out.println("Run Customer Insert");
         Courier courier = new Courier(courierName,password,courierPhone, courierID, workLoad);
-        boolean flag = courierService.insert(courier);
+        int flag = courierService.insert(courier);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             //录入成功
             msg.setStatus(0);
             msg.setResult("用户录入成功!");
@@ -146,9 +146,9 @@ public class CourierController {
         courier.setCourierID(courierID);
         courier.setWorkLoad(workLoad);
 
-        boolean flag = courierService.update(courierID, courier);
+        int flag = courierService.update(courierID, courier);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -164,9 +164,9 @@ public class CourierController {
     @ResponseBody
     public String delete(HttpServletRequest request, HttpServletResponse response){
         String courierID = request.getParameter("courierID");
-        boolean flag = courierService.delete(courierID);
+        int flag = courierService.delete(courierID);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{

@@ -21,7 +21,7 @@ public interface BaseExpressDao {
      * @param pageNumber 页查询的数量
      * @return 快递的集合
      */
-    List<Express> findAll(boolean limit, int offset, int pageNumber);
+    List<Express> findAll(Map map);
 
     /**
      * 根据快递单号，查询快递信息
@@ -56,7 +56,7 @@ public interface BaseExpressDao {
      * @param e 要录入的快递对象
      * @return 录入的结果，true表示成功，false表示失败
      */
-    boolean insert(Express e) throws DuplicateCodeException;
+    int insert(Express e) throws DuplicateCodeException;
 
     /**
      * 快递的修改
@@ -64,24 +64,24 @@ public interface BaseExpressDao {
      * @param newExpress 新的快递对象（number，company,username,userPhone）
      * @return 修改的结果，true表示成功，false表示失败
      */
-    boolean update(int id, Express newExpress);
+    int update(Map map);
 
     /**
      * 更改快递的状态为1，表示取件完成
      * @param code 要修改的快递取件码
      * @return 修改的结果，true表示成功，false表示失败
      */
-    boolean updateStatus(String code);
+    int updateStatus(String code);
 
     /**
      * 根据id，删除单个快递信息
      * @param id 要删除的快递id
      * @return 删除的结果，true表示成功，false表示失败
      */
-    boolean delete(int id);
+    int delete(int id);
 
 
-    List<Express> findByUserPhoneAndStatus(String sysPhone, int status);
+    List<Express> findByUserPhoneAndStatus(Map map);
 
 
 

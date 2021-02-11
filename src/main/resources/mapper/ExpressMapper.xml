@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.hezho.dao.BaseExpressDao">
+    <select id="console" resultType="map">
+        select (select count(id)) as data1_size, (select count(to_days(intime)=to_days(now())) or null) as data1_day,(select count(status=0)) as data2_size, (select count(to_days(intime))=to_days(now())) as data2_day
+        from eexpress
+    </select>
+
+    <select id="findAll" resultType="com.hezho.bean.Express" parameterType="map">
+        select * from eexpress limit #{offset}, #{pageNumber}
+    </select>
+
+    <select id="findByNumber" resultType="com.hezho.bean.Express" parameterType="string">
+        select * from eexpress where courierID=#{number}
+    </select>
+
+    <insert id="insert" parameterType="com.hezho.bean.Express">
+        insert into eexpress(number, username, company, code, intime, status, sysphone)
+        values(#{number}, #{username}, #{company}, #{code}, now(), 0, #{sysphone})
+    </insert>
+
+    <update id="update" parameterType="map">
+        update eexpress set courierName=#{courierName},password=#{password},courierPhone=#{courierPhone},workLoad=#{workLoad}
+        where courierID=#{courierID}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        delete from eexpress where courierID=#{courierID}
+    </delete>
+
+    <select id="findByCode" resultType="com.hezho.bean.Express" parameterType="string">
+        select from eexpress where code=#{code}
+    </select>
+
+    <select id="findByUserPhone" resultType="com.hezho.bean.Express" parameterType="string">
+        select from eexpress where userphone=#{userPhone}
+    </select>
+
+    <select id="findBySysPhone" resultType="com.hezho.bean.Express" parameterType="string">
+        select from eexpress where sysphone=#{sysPhone}
+    </select>
+
+    <update id="updateStatus" parameterType="string">
+        update eexpress set status=1, outtime=now() where code=#{code}
+    </update>
+
+    <select id="findByUserPhoneAndStatus" resultType="com.hezho.bean.Express" parameterType="string">
+        select from eexpress where sysphone=#{sysPhone}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -85,9 +85,9 @@ public class ExpressController {
         } else {
             e = new Express(number,username,userPhone,company, sysPhone);
         }
-        boolean flag = expressService.insert(e);
+        int flag = expressService.insert(e);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             //录入成功
             msg.setStatus(0);
             msg.setResult("快递录入成功!");
@@ -133,9 +133,9 @@ public class ExpressController {
         newExpress.setUsername(username);
         newExpress.setUserPhone(userPhone);
         newExpress.setStatus(status);
-        boolean flag = expressService.update(id, newExpress);
+        int flag = expressService.update(id, newExpress);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -150,9 +150,9 @@ public class ExpressController {
     @ResponseBody
     public String delete(HttpServletRequest request, HttpServletResponse response){
         int id = Integer.parseInt(request.getParameter("id"));
-        boolean flag = expressService.delete(id);
+        int flag = expressService.delete(id);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{

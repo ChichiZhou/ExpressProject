@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.hezho.dao.BaseAdminDao">
+    <select id="login" resultType="com.hezho.bean.Admin" parameterType="map">
+        select * from eadmin
+        where username=#{userName} and password=#{passWord}
+    </select>
+
+    <select id="updateLoginTime" parameterType="map">
+        update eadmin set logintime=#{loginTime},loginip=#{loginIP} where username=#{userName}
+    </select>
+
+
+
+</mapper>

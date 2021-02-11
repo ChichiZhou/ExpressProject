@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.hezho.dao.BaseCustomerDao">
+    <select id="console" resultType="map">
+        select (select count(id)) as data1_size, (select count(to_days(regTime)=to_days(now())) or null) as data1_day
+        from ecustomer
+    </select>
+
+    <select id="findAll" resultType="com.hezho.bean.Customer" parameterType="map">
+        select * from ecustomer limit #{offset}, #{pageNumber}
+    </select>
+
+    <select id="findByCustomerID" resultType="com.hezho.bean.Customer" parameterType="string">
+        select * from ecustomer where courierID=#{courierID}
+    </select>
+
+    <insert id="insert" parameterType="com.hezho.bean.Customer">
+        insert into ecustomer(usrname, password, userphone, regtime, logintime, customerID)
+        values(#{usrname}, #{password}, #{userphone}, now(), null, #{customerID})
+    </insert>
+
+    <update id="update" parameterType="map">
+        update ecustomer set courierName=#{courierName},password=#{password},courierPhone=#{courierPhone},workLoad=#{workLoad}
+        where courierID=#{courierID}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        delete from ecustomer where courierID=#{courierID}
+    </delete>
+
+    <select id="findByCustomerPhone" resultType="com.hezho.bean.Customer" parameterType="string">
+        select from ecustomer where userphone=#{customerphone}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

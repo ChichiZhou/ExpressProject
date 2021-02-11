@@ -109,9 +109,9 @@ public class CustomerController {
 
         System.out.println("Run Customer Insert");
         Customer e = new Customer(userName,password,userPhone, customerID);
-        boolean flag = customerService.insert(e);
+        int flag = customerService.insert(e);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             //录入成功
             msg.setStatus(0);
             msg.setResult("用户录入成功!");
@@ -144,9 +144,9 @@ public class CustomerController {
         customer.setUserName(userName);
         customer.setCustomerID(customerID);
 
-        boolean flag = customerService.update(customerID, customer);
+        int flag = customerService.update(customerID, customer);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -162,9 +162,9 @@ public class CustomerController {
     @ResponseBody
     public String delete(HttpServletRequest request, HttpServletResponse response){
         String customerID = request.getParameter("customerID");
-        boolean flag = customerService.delete(customerID);
+        int flag = customerService.delete(customerID);
         Message msg = new Message();
-        if(flag){
+        if(flag == 1){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{

@@ -20,7 +20,7 @@ public interface BaseCourierDao {
      * @param pageNumber 页查询的数量
      * @return 快递的集合
      */
-    List<Courier> findAll(boolean limit, int offset, int pageNumber);
+    List<Courier> findAll(Map map);
 
     /**
      * 根据用户手机号码，查询他所有的快递信息
@@ -34,7 +34,7 @@ public interface BaseCourierDao {
      * @param customer 要录入的快递对象
      * @return 录入的结果，true表示成功，false表示失败
      */
-    boolean insert(Courier customer) throws DuplicateCodeException;
+    int insert(Courier customer) throws DuplicateCodeException;
 
     /**
      * 快递的修改
@@ -42,12 +42,12 @@ public interface BaseCourierDao {
      * @param newExpress 新的快递对象（number，company,username,userPhone）
      * @return 修改的结果，true表示成功，false表示失败
      */
-    boolean update(String customerID, Courier newExpress);
+    int update(Map map);
 
     /**
      * 根据id，删除单个快递信息
      * @param customerID 要删除的快递id
      * @return 删除的结果，true表示成功，false表示失败
      */
-    boolean delete(String customerID);
+    int delete(String customerID);
 }
