@@ -66,6 +66,9 @@ public class ExpressService{
         map.put("offset", offset);
         map.put("pageNumber", pageNumber);
         List<Express> expresses = baseExpressDao.findAll(map);
+        for (Express item:expresses){
+            System.out.println(item);
+        }
         SqlSessionUtil.closeSession();
         return expresses;
 

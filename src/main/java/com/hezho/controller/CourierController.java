@@ -111,7 +111,7 @@ public class CourierController {
         Courier courier = new Courier(courierName,password,courierPhone, courierID, workLoad);
         int flag = courierService.insert(courier);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             //录入成功
             msg.setStatus(0);
             msg.setResult("用户录入成功!");
@@ -148,7 +148,7 @@ public class CourierController {
 
         int flag = courierService.update(courierID, courier);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -166,7 +166,7 @@ public class CourierController {
         String courierID = request.getParameter("courierID");
         int flag = courierService.delete(courierID);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{

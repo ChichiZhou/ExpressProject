@@ -1,4 +1,5 @@
 import com.hezho.bean.Admin;
+import com.hezho.bean.Express;
 import com.hezho.dao.BaseAdminDao;
 import com.hezho.dao.BaseCourierDao;
 import com.hezho.dao.BaseExpressDao;
@@ -68,6 +69,19 @@ public class testMybatis {
         List<Map<String, Integer>> resultMap = baseExpressDao.console();
         System.out.println(resultMap);
 
+        SqlSessionUtil.closeSession();
+    }
+
+    @Test
+    public void testFindAll(){
+        BaseExpressDao baseExpressDao = session.getMapper(BaseExpressDao.class);
+        Map map = new HashMap();
+        map.put("offset", 0);
+        map.put("pageNumber", 5);
+        List<Express> expresses = baseExpressDao.findAll(map);
+        for (Express item:expresses){
+            System.out.println(item);
+        }
         SqlSessionUtil.closeSession();
     }
 }

@@ -111,7 +111,7 @@ public class CustomerController {
         Customer e = new Customer(userName,password,userPhone, customerID);
         int flag = customerService.insert(e);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             //录入成功
             msg.setStatus(0);
             msg.setResult("用户录入成功!");
@@ -146,7 +146,7 @@ public class CustomerController {
 
         int flag = customerService.update(customerID, customer);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -164,7 +164,7 @@ public class CustomerController {
         String customerID = request.getParameter("customerID");
         int flag = customerService.delete(customerID);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{

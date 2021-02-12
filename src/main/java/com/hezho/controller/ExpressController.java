@@ -51,8 +51,12 @@ public class ExpressController {
         //3.    进行查询
         System.out.println("List All Items");
         List<Express> list = expressService.findAll(true, offset, pageNumber);
+        for (Express item:list){
+            System.out.println(item);
+        }
         List<BootStrapTableExpress> list2 = new ArrayList<>();
         for(Express e:list){
+            System.out.println(e.getUsername());
             String inTime = DateFormatUtil.format(e.getInTime());
             String outTime = e.getOutTime()==null?"未出库": DateFormatUtil.format(e.getOutTime());
             String status = e.getStatus()==0?"待取件":"已取件";
@@ -87,7 +91,7 @@ public class ExpressController {
         }
         int flag = expressService.insert(e);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             //录入成功
             msg.setStatus(0);
             msg.setResult("快递录入成功!");
@@ -135,7 +139,7 @@ public class ExpressController {
         newExpress.setStatus(status);
         int flag = expressService.update(id, newExpress);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("修改成功");
         }else{
@@ -152,7 +156,7 @@ public class ExpressController {
         int id = Integer.parseInt(request.getParameter("id"));
         int flag = expressService.delete(id);
         Message msg = new Message();
-        if(flag == 1){
+        if(flag != 0){
             msg.setStatus(0);
             msg.setResult("删除成功");
         }else{
