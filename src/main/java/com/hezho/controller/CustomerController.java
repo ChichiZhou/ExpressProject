@@ -26,7 +26,7 @@ public class CustomerController {
 
     @RequestMapping("/user/console.do")
     @ResponseBody
-    public String console(HttpServletRequest request, HttpServletResponse response){
+    public String console(){
         Map<String, Integer> data = customerService.console();
         System.out.println("The key of Map is " + data.keySet());
         System.out.println("The value of Map is " + data.values());
@@ -44,7 +44,7 @@ public class CustomerController {
 
     @RequestMapping("/user/list.do")
     @ResponseBody
-    public String list(HttpServletRequest request, HttpServletResponse response){
+    public String list(HttpServletRequest request){
         //1.    获取查询数据的起始索引值
         int offset = Integer.parseInt(request.getParameter("offset"));
         //2.    获取当前页要查询的数据量
@@ -82,7 +82,7 @@ public class CustomerController {
 
     @RequestMapping("/user/find.do")
     @ResponseBody
-    public String find(HttpServletRequest request, HttpServletResponse response){
+    public String find(HttpServletRequest request){
         String number = request.getParameter("customerID");
         Customer customer = customerService.findByCustomerID(number);
         Message msg = new Message();
@@ -101,7 +101,7 @@ public class CustomerController {
 
     @RequestMapping("/user/insert.do")
     @ResponseBody
-    public String insert(HttpServletRequest request, HttpServletResponse response){
+    public String insert(HttpServletRequest request){
         String userName = request.getParameter("userName");
         String password = request.getParameter("password");
         String userPhone = request.getParameter("userPhone");
@@ -127,7 +127,7 @@ public class CustomerController {
 
     @RequestMapping("/user/update.do")
     @ResponseBody
-    public String update(HttpServletRequest request, HttpServletResponse response){
+    public String update(HttpServletRequest request){
         String customerID = request.getParameter("customerID");
         String password = request.getParameter("password");
         String userPhone = request.getParameter("userPhone");
@@ -160,7 +160,7 @@ public class CustomerController {
 
     @RequestMapping("/user/delete.do")
     @ResponseBody
-    public String delete(HttpServletRequest request, HttpServletResponse response){
+    public String delete(HttpServletRequest request){
         String customerID = request.getParameter("customerID");
         boolean flag = customerService.delete(customerID);
         Message msg = new Message();

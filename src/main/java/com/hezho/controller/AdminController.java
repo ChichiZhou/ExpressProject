@@ -23,7 +23,7 @@ public class AdminController {
     UserUtil userUtil;
 
     @RequestMapping("/admin/login.do")
-    public @ResponseBody Message login(HttpServletRequest req, HttpServletResponse resp) throws SQLException {
+    public @ResponseBody Message login(HttpServletRequest req) throws SQLException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
@@ -47,7 +47,7 @@ public class AdminController {
 
     @RequestMapping("/logout.do")
     @ResponseBody         // 这个很重要！！！！！不然 页面无法接受到返回值
-    public String logout(HttpServletRequest request, HttpServletResponse response){
+    public String logout(HttpServletRequest request){
         request.getSession().invalidate();
         System.out.println("logout被调用");
         Message message = null;

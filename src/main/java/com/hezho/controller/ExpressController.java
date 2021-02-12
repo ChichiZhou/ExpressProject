@@ -27,7 +27,7 @@ public class ExpressController {
 
     @RequestMapping("/express/console.do")
     @ResponseBody
-    public String console(HttpServletRequest request, HttpServletResponse response){
+    public String console(){
         List<Map<String, Integer>> data = expressService.console();
         Message msg = new Message();
         if(data.size() == 0){
@@ -43,7 +43,7 @@ public class ExpressController {
 
     @RequestMapping("/express/list.do")
     @ResponseBody
-    public String list(HttpServletRequest request, HttpServletResponse response){
+    public String list(HttpServletRequest request){
         //1.    获取查询数据的起始索引值
         int offset = Integer.parseInt(request.getParameter("offset"));
         //2.    获取当前页要查询的数据量
@@ -72,7 +72,7 @@ public class ExpressController {
 
     @RequestMapping("/express/insert.do")
     @ResponseBody
-    public String insert(HttpServletRequest request, HttpServletResponse response){
+    public String insert(HttpServletRequest request){
         Express e = null;
         String number = request.getParameter("number");
         String company = request.getParameter("company");
@@ -102,7 +102,7 @@ public class ExpressController {
 
     @RequestMapping("/express/find.do")
     @ResponseBody
-    public String find(HttpServletRequest request, HttpServletResponse response){
+    public String find(HttpServletRequest request){
         String number = request.getParameter("number");
         Express e = expressService.findByNumber(number);
         Message msg = new Message();
@@ -120,7 +120,7 @@ public class ExpressController {
 
     @RequestMapping("/express/update.do")
     @ResponseBody
-    public String update(HttpServletRequest request, HttpServletResponse response){
+    public String update(HttpServletRequest request){
         int id = Integer.parseInt(request.getParameter("id"));
         String number = request.getParameter("number");
         String company = request.getParameter("company");
@@ -148,7 +148,7 @@ public class ExpressController {
 
     @RequestMapping("/express/delete.do")
     @ResponseBody
-    public String delete(HttpServletRequest request, HttpServletResponse response){
+    public String delete(HttpServletRequest request){
         int id = Integer.parseInt(request.getParameter("id"));
         boolean flag = expressService.delete(id);
         Message msg = new Message();
